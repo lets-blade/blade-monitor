@@ -2,7 +2,13 @@
 
 Monitor the Blade application.
 
+## Preview
+
+![](screenshot/preview.png)
+
 ## Usage
+
+- `blade-mvc:2.0.8-BETA2` or later
 
 Adding dependency
 
