@@ -1,18 +1,12 @@
-package com.blade.plugin.monitor.controller;
+package com.blade.monitor.controller;
 
-import com.blade.mvc.WebContext;
+import com.blade.monitor.bootstrap.MonitorBootstrap;
+import com.blade.monitor.utils.CPUMonitorCalc;
 import com.blade.mvc.annotation.GetRoute;
 import com.blade.mvc.annotation.Path;
-import com.blade.mvc.route.Route;
 import com.blade.mvc.ui.RestResponse;
-import com.blade.plugin.monitor.model.RouteVO;
-import com.blade.plugin.monitor.model.SystemVO;
-import com.blade.plugin.monitor.utils.CPUMonitorCalc;
-import com.blade.plugin.monitor.utils.SystemUtils;
-
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import com.blade.monitor.model.SystemVO;
+import com.blade.monitor.utils.SystemUtils;
 
 /**
  * Api Controller
@@ -25,8 +19,7 @@ public class ApiController {
 
     @GetRoute("routes")
     public RestResponse routes() {
-        List<RouteVO> routeVOS = this.getRoutes();
-        return RestResponse.ok(routeVOS);
+        return RestResponse.ok(MonitorBootstrap.getRouteVOS());
     }
 
     @GetRoute("sysInfo")
@@ -46,14 +39,6 @@ public class ApiController {
 
         SystemUtils.setMemoryUsage(systemVO);
         return RestResponse.ok(systemVO);
-    }
-
-    private List<RouteVO> getRoutes() {
-        Map<String, Route> routes = WebContext.blade().routeMatcher().getRoutes();
-
-        return routes.values().stream()
-                .map(route -> new RouteVO(route.getPath(), route.getHttpMethod().name()))
-                .collect(Collectors.toList());
     }
 
 }

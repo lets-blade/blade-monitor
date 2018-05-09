@@ -1,4 +1,4 @@
-package com.blade.plugin.monitor.model;
+package com.blade.monitor.model;
 
 import lombok.Data;
 

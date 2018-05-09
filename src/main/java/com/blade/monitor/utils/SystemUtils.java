@@ -1,7 +1,7 @@
-package com.blade.plugin.monitor.utils;
+package com.blade.monitor.utils;
 
 import com.blade.kit.ConvertKit;
-import com.blade.plugin.monitor.model.SystemVO;
+import com.blade.monitor.model.SystemVO;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;

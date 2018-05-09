@@ -1,4 +1,4 @@
-package com.blade.plugin.monitor.controller;
+package com.blade.monitor.controller;
 
 import com.blade.mvc.annotation.GetRoute;
 import com.blade.mvc.annotation.Path;

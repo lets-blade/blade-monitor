@@ -1,4 +1,4 @@
-package com.blade.plugin.monitor.utils;
+package com.blade.monitor.utils;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;

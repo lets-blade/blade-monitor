@@ -1,4 +1,4 @@
-package com.blade.plugin.monitor;
+package com.blade.monitor;
 
 import com.blade.Blade;
 
