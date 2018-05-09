@@ -25,7 +25,7 @@ public class MonitorBootstrap implements BeanProcessor {
     public void processor(Blade blade) {
         Map<String, Route> routes = WebContext.blade().routeMatcher().getRoutes();
         routeVOS = routes.values().stream()
-                .filter(route -> !route.getPath().startsWith("/monitor/api"))
+                .filter(route -> !route.getPath().startsWith("/monitor"))
                 .map(route -> new RouteVO(route.getAllPath(), route.getPath(), route.getHttpMethod().name()))
                 .collect(Collectors.toList());
     }

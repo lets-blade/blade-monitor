@@ -1,12 +1,17 @@
 package com.blade.monitor.controller;
 
 import com.blade.monitor.bootstrap.MonitorBootstrap;
+import com.blade.monitor.model.TaskVO;
 import com.blade.monitor.utils.CPUMonitorCalc;
 import com.blade.mvc.annotation.GetRoute;
 import com.blade.mvc.annotation.Path;
 import com.blade.mvc.ui.RestResponse;
 import com.blade.monitor.model.SystemVO;
 import com.blade.monitor.utils.SystemUtils;
+import com.blade.task.TaskManager;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Api Controller
@@ -39,6 +44,14 @@ public class ApiController {
 
         SystemUtils.setMemoryUsage(systemVO);
         return RestResponse.ok(systemVO);
+    }
+
+    @GetRoute("tasks")
+    public RestResponse tasks() {
+        List<TaskVO> collect = TaskManager.getTasks().stream()
+                .map(task -> new TaskVO(task.getName(), task.getCronExpression().getCronExpression(), task.isRunning()))
+                .collect(Collectors.toList());
+        return RestResponse.ok(collect);
     }
 
 }
