@@ -38,8 +38,8 @@ public class MemoryAndGCProfiler implements Profiler {
         Long heapMemoryTotalUsed = heapMemoryUsage.getUsed();
         Long heapMemoryCommitted= heapMemoryUsage.getCommitted();
 
-        memoryMap.put("heapMemoryTotalUsed", heapMemoryTotalUsed);
-        memoryMap.put("heapMemoryCommitted", heapMemoryCommitted);
+        memoryMap.put("heapMemoryTotalUsed", heapMemoryTotalUsed / 1024 / 1024);
+        memoryMap.put("heapMemoryCommitted", heapMemoryCommitted / 1024 / 1024);
 
         List<GarbageCollectorMXBean> garbageCollectorMXBeans = ManagementFactory.getGarbageCollectorMXBeans();
         if (garbageCollectorMXBeans != null) {
