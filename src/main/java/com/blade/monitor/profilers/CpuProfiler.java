@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CpuProfiler implements Profiler {
 
-    public static final String PROFILER_NAME = "CPU";
+    private static final String PROFILER_NAME = "CPU";
 
     private static final String PROCESS_CPU_LOAD = "ProcessCpuLoad";
     private static final int INDEX_PROCESS_CPU_LOAD = 0;

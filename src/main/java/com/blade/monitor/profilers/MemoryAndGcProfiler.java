@@ -12,13 +12,13 @@ import java.util.stream.Collectors;
  * @author PSH
  * Date: 2018/11/8
  */
-public class MemoryAndGCProfiler implements Profiler {
+public class MemoryAndGcProfiler implements Profiler {
 
     private Reporter            reporter;
 
     private MemoryMXBean        memoryMXBean;
 
-    public MemoryAndGCProfiler (Reporter reporter) {
+    public MemoryAndGcProfiler(Reporter reporter) {
         this.reporter = reporter;
         init ();
     }
@@ -30,8 +30,12 @@ public class MemoryAndGCProfiler implements Profiler {
        this.memoryMXBean = ManagementFactory.getMemoryMXBean();
     }
 
+    /**
+     *
+     * this will get MemoryInfo and garbageCollectorInfo
+     */
     @Override
-    public void profile() {
+    public synchronized void profile() {
 
         HashMap<String, Object> memoryMap = new HashMap<>(5);
         MemoryUsage heapMemoryUsage = memoryMXBean.getHeapMemoryUsage();
@@ -41,21 +45,40 @@ public class MemoryAndGCProfiler implements Profiler {
         memoryMap.put("heapMemoryTotalUsed", heapMemoryTotalUsed / 1024 / 1024);
         memoryMap.put("heapMemoryCommitted", heapMemoryCommitted / 1024 / 1024);
 
+        MemoryUsage nonHeapMemoryUsage = memoryMXBean.getNonHeapMemoryUsage();
+        Long used = nonHeapMemoryUsage.getUsed();
+        Long nonHeapMemoryCommitted = nonHeapMemoryUsage.getCommitted();
+        memoryMap.put("nonHeapMemoryUsage", used);
+        memoryMap.put("nonHeadMemoryCommitted", nonHeapMemoryCommitted);
+
         List<GarbageCollectorMXBean> garbageCollectorMXBeans = ManagementFactory.getGarbageCollectorMXBeans();
         if (garbageCollectorMXBeans != null) {
-            List<HashMap<String, Object>> collect = garbageCollectorMXBeans.stream()
+            List<HashMap<String, Object>> garbageCollect = garbageCollectorMXBeans.stream()
                 .map(gcMxBean -> {
-                    HashMap<String, Object> gcInfo = new HashMap<>();
+                    HashMap<String, Object> gcInfo = new HashMap<>(3);
                     String name = gcMxBean.getName();
-                    gcInfo.put("name", name);
+                    gcInfo.put("garbageCollectorName", name);
                     gcInfo.put("collectionCount", gcMxBean.getCollectionCount());
                     gcInfo.put("collectionTime", gcMxBean.getCollectionTime());
                     return gcInfo;
 
                 })
                 .collect(Collectors.toList());
-            memoryMap.put("gc", collect);
+            memoryMap.put("gc", garbageCollect);
         }
+
+        //
+        List<HashMap<String, Object>> pollCollect = ManagementFactory.getMemoryPoolMXBeans()
+            .stream()
+            .map(memoryPoolMXBean -> {
+                HashMap<String, Object> pools = new HashMap<>(2);
+                String name = memoryPoolMXBean.getName();
+                MemoryUsage usage = memoryPoolMXBean.getUsage();
+                pools.put("poolName", name);
+                pools.put("usage", usage);
+                return pools;
+            }).collect(Collectors.toList());
+        memoryMap.put("poolName", pollCollect);
 
         reporter.report("MemoryAndGC", memoryMap);
     }
