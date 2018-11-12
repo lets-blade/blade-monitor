@@ -76,12 +76,11 @@ public class CpuProfiler implements Profiler {
         attributes.put("processCpuLoad", processCpuLoad);
         attributes.put("systemCpuLoad", systemCpuLoad);
         attributes.put("processCpuTime", processCpuTime);
-
+        reporter.report(PROFILER_NAME, attributes);
     }
 
     @Override
     public void setReport(Reporter report) {
-
         this.reporter = report;
     }
 
