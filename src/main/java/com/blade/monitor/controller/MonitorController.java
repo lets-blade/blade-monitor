@@ -16,4 +16,10 @@ public class MonitorController {
         return "jar:/templates/monitor.html";
     }
 
+    @GetRoute("/system_more")
+    public String systemMore(Response response) {
+        return "jar:/templates/system_more.html";
+    }
+
+
 }
